@@ -1,0 +1,9 @@
+pm_api_url    = "https://192.168.5.11:8006/api2/json"
+pm_user       = "root"
+pm_password   = "secret"
+target_node   = "pve"
+template      = "debian-cloudinit-template"
+master_ips    = ["192.168.55.10"]
+worker_ips    = ["192.168.55.11", "192.168.55.12"]
+gateway       = "192.168.55.1"
+ssh_public_key = "~/.ssh/id_rsa.pub"
