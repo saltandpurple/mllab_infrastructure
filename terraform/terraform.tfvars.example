@@ -1,0 +1,9 @@
+pm_api_url    = "https://proxmox.example.com:8006/api2/json"
+pm_user       = "terraform@pve"
+pm_password   = "secret"
+target_node   = "pve"
+template      = "debian-cloudinit-template"
+master_ips    = ["192.168.56.10"]
+worker_ips    = ["192.168.56.11", "192.168.56.12"]
+gateway       = "192.168.56.1"
+ssh_public_key = "~/.ssh/id_rsa.pub"
