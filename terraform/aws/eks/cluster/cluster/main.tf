@@ -66,8 +66,7 @@ module "eks" {
 
   cluster_addons = {
     coredns = {
-      # Setting preserve to true will retain config changes
-      # to addons when updating.
+      # Setting preserve to true will retain config changes to addons when updating.
       preserve      = true
       most_recent   = var.coredns_addon_version == null ? true : false
       addon_version = var.coredns_addon_version
@@ -128,9 +127,6 @@ module "eks" {
   tags = var.eks_tags
 }
 
-
-
-
 # --- Fargate Security Group Policy
 # This makes sure that the pods running on Fargate use the
 # node security group (otherwise they would use the cluster
@@ -168,26 +164,26 @@ resource "kubectl_manifest" "fargate_kube_system_security_group_policy" {
   })
 }
 
-resource "kubectl_manifest" "fargate_kyverno_security_group_policy" {
-  yaml_body = yamlencode({
-    apiVersion = "vpcresources.k8s.aws/v1beta1"
-    kind       = "SecurityGroupPolicy"
-    metadata = {
-      name      = "fargate-policy"
-      namespace = "kyverno"
-    }
-    spec = {
-      podSelector = {
-        matchLabels = {
-          "ml.lab/runOnFargate" = "true"
-        }
-      }
-      securityGroups = {
-        groupIds = [module.eks.node_security_group_id]
-      }
-    }
-  })
-}
+# resource "kubectl_manifest" "fargate_kyverno_security_group_policy" {
+#   yaml_body = yamlencode({
+#     apiVersion = "vpcresources.k8s.aws/v1beta1"
+#     kind       = "SecurityGroupPolicy"
+#     metadata = {
+#       name      = "fargate-policy"
+#       namespace = "kyverno"
+#     }
+#     spec = {
+#       podSelector = {
+#         matchLabels = {
+#           "ml.lab/runOnFargate" = "true"
+#         }
+#       }
+#       securityGroups = {
+#         groupIds = [module.eks.node_security_group_id]
+#       }
+#     }
+#   })
+# }
 
 
 # IRSA
@@ -218,7 +214,7 @@ module "csi_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~>5.33"
 
-  role_name             = var.csi_irsa_iam_role_name == null ? "eks-${var.eks_cluster_name}-csi-irsa" : var.csi_irsa_iam_role_name
+  role_name             = "eks-${var.eks_cluster_name}-csi-irsa"
   attach_ebs_csi_policy = true
 
   oidc_providers = {
@@ -283,19 +279,5 @@ module "ebs_kms_key" {
 
 
 
-
-moved {
-  # Workaround since instances are not supported
-  # https://github.com/hashicorp/terraform/issues/34439
-  from = kubectl_manifest.aws_node_env
-  to   = kubectl_manifest.aws_node_env_0
-}
-removed {
-  # We instead configure this as part of the addon config
-  from = kubectl_manifest.aws_node_env_0
-  lifecycle {
-    destroy = false
-  }
-}
 
 

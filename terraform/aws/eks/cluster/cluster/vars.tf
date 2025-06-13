@@ -33,11 +33,11 @@ variable "coredns_addon_version" {
   default     = null
 }
 
-variable "vpc_cni_addon_version" {
-  type        = string
-  description = "If empty, most recent version is used"
-  default     = null
-}
+# variable "vpc_cni_addon_version" {
+#   type        = string
+#   description = "If empty, most recent version is used"
+#   default     = null
+# }
 
 variable "kube_proxy_addon_version" {
   type        = string

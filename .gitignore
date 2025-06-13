@@ -1,5 +1,16 @@
+# IntelliJ
+*.iml
+*.idea/
 .idea/
 .idea/**
 *.iml
+
+# Terraform
 *secret.tfvars
-/terraform/aws/eks/cluster/cluster/.terraform/
+*/.terraform/
+.terraform/
+*.tfstate
+*.tfstate.*
+
+.terraform.lock.hcl
+.terraform.tfstate.lock.info
