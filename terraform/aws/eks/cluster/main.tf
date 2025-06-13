@@ -187,28 +187,24 @@ resource "kubectl_manifest" "fargate_kube_system_security_group_policy" {
 
 
 # IRSA
-# module "vpc_cni_irsa" {
-#   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-#   version = "~>5.33"
-#
-#   role_name_prefix      = var.vpc_cni_irsa_iam_role_name == null ? "eks-${var.eks_cluster_name}-vpc-cni-irsa" : null
-#   role_name             = var.vpc_cni_irsa_iam_role_name
-#   policy_name_prefix    = "eks-${var.eks_cluster_name}-vpc-cni-policy"
-#   attach_vpc_cni_policy = true
-#   vpc_cni_enable_ipv4   = true
-#   vpc_cni_enable_ipv6   = false
-#
-#   oidc_providers = {
-#     main = {
-#       provider_arn               = module.eks.oidc_provider_arn
-#       namespace_service_accounts = ["kube-system:aws-node"]
-#     }
-#   }
-#
-#   tags = {
-#     Name = "eks_cni_role"
-#   }
-# }
+module "vpc_cni_irsa" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "~>5.58"
+
+  # role_name_prefix      = "eks-${var.eks_cluster_name}-vpc-cni-irsa"
+  role_name             = "eks-${var.eks_cluster_name}-cni-role"
+  policy_name_prefix    = "eks-${var.eks_cluster_name}-vpc-cni-policy"
+  attach_vpc_cni_policy = true
+  vpc_cni_enable_ipv4   = true
+  vpc_cni_enable_ipv6   = false
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:aws-node"]
+    }
+  }
+}
 
 module "csi_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
