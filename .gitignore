@@ -2,3 +2,4 @@
 .idea/**
 *.iml
 *secret.tfvars
+/terraform/aws/eks/cluster/cluster/.terraform/
