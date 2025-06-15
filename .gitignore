@@ -1,4 +1,18 @@
+# IntelliJ
+*.iml
+*.idea/
 .idea/
 .idea/**
 *.iml
-*secret.tfvars
+
+# Terraform
+*secret*.tfvars
+*/.terraform/
+.terraform/
+*.tfstate
+*.tfstate.*
+
+.terraform.lock.hcl
+.terraform.tfstate.lock.info
+
+*kubeconfig-mllab
