@@ -14,3 +14,5 @@
 
 .terraform.lock.hcl
 .terraform.tfstate.lock.info
+
+*kubeconfig-mllab

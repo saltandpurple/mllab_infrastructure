@@ -7,6 +7,26 @@ resource "aws_vpc" "main_vpc" {
   }
 }
 
+resource "aws_eip" "nat_eip" {
+  domain = "vpc"
+
+  tags = {
+    Name = "NatGatewayEIP"
+  }
+}
+
+resource "aws_nat_gateway" "main_nat" {
+  allocation_id = aws_eip.nat_eip.id
+  subnet_id     = aws_subnet.public_subnet[0].id
+
+  tags = {
+    Name = "MainNatGateway"
+  }
+
+  depends_on = [aws_internet_gateway.main_igw]
+}
+
+
 # Subnets
 resource "aws_subnet" "public_subnet" {
   count                   = 3
@@ -68,6 +88,11 @@ resource "aws_route_table" "private_routing_table" {
   route {
     cidr_block = aws_vpc.main_vpc.cidr_block
     gateway_id = "local"
+  }
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.main_nat.id
   }
 
   dynamic "route" {
