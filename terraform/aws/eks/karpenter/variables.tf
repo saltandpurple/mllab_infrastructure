@@ -5,13 +5,12 @@ variable "eks_cluster_name" {
 
 variable "eks_cluster_subnet_ids" {
   type        = list(string)
-  description = "List of Subnet IDs that should be used for any karpenter EC2 node."
+  description = "List of Subnet IDs that will be used for any karpenter EC2 node."
 }
 
 variable "ebs_kms_key_id" {
   type        = string
-  description = "(Optional) KMS Key ID that will be used for root volumes of any karpenter EC2 node, if empty the AWS managed KMS key will be used. Check the output `ebs_kms_key_statements` for necessary permissions."
-  default     = null
+  description = "KMS Key ID that will be used for root volumes of any karpenter EC2 node."
 }
 
 variable "eks_node_availability_zones" {
@@ -22,17 +21,5 @@ variable "eks_node_availability_zones" {
 
 variable "karpenter_helm_release_version" {
   type        = string
-  default     = "1.2.0"
-  description = "(Optional) Version of Karpenter (and CRDs) that will be installed."
-}
-
-variable "nodeclass_metadata_options" {
-  type = object({
-    httpEndpoint            = optional(string, "enabled")
-    httpProtocolIPv6        = optional(string, "disabled")
-    httpPutResponseHopLimit = optional(number, 2)
-    httpTokens              = optional(string, "required")
-  })
-  description = "AWS IMDS setting for the `bottlerocket` and `AL2` EC2NodeClass"
-  default = {}
+  description = "Version of Karpenter (and CRDs) that will be installed."
 }
