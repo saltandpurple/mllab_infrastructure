@@ -25,7 +25,7 @@ module "eks" {
   enable_cluster_creator_admin_permissions = true
 
   cluster_endpoint_private_access = true
-  cluster_endpoint_public_access  = false
+  cluster_endpoint_public_access  = true
   cluster_additional_security_group_ids = concat(
     [aws_security_group.eks_control_plane_additional_rules.id],
   )
@@ -220,6 +220,23 @@ module "csi_irsa" {
     }
   }
 }
+
+module "aws_lb_controller_irsa" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "~>5.33"
+
+  role_name                              = "eks-${var.eks_cluster_name}-aws-lb-controller-irsa"
+  attach_load_balancer_controller_policy = true
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
+    }
+  }
+}
+
+# todo: s3 policy
 
 # EBS KMS Key
 module "ebs_kms_key" {
