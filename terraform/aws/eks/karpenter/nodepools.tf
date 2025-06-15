@@ -3,7 +3,7 @@ locals {
     nodeClassRef = {
       group = "karpenter.k8s.aws"
       kind  = "EC2NodeClass"
-      name  = "arm64_default"
+      name  = "al2-default"
     }
     requirements = [
       {
@@ -30,13 +30,58 @@ locals {
   }
 }
 
-# todo: properly spec this
+
+resource "kubectl_manifest" "karpenter_amazon_linux_node_class" {
+  provider = kubectl
+  yaml_body = yamlencode({
+    apiVersion = "karpenter.k8s.aws/v1"
+    kind       = "EC2NodeClass"
+    metadata = {
+      name = "al2-default"
+    }
+    spec = {
+      amiFamily = "AL2"
+      amiSelectorTerms = [{
+        alias = "al2@latest"
+      }]
+      subnetSelectorTerms = [
+        for subnet_id in var.eks_cluster_subnet_ids : {
+          id = subnet_id
+        }
+      ]
+      securityGroupSelectorTerms = [{
+        id = data.aws_security_group.sg_eks_worker_node.id
+      }]
+      instanceProfile = module.karpenter_aws_resources.instance_profile_name
+      blockDeviceMappings = [
+        {
+          # Root device
+          deviceName = "/dev/xvda"
+          ebs = {
+            volumeSize = "100Gi"
+            volumeType = "gp3"
+            encrypted  = true
+            kmsKeyID   = var.ebs_kms_key_id
+          }
+        },
+      ]
+      # https://karpenter.sh/v1.2/concepts/nodeclasses/#specinstancestorepolicy
+      instanceStorePolicy = "RAID0"
+      detailedMonitoring = false
+    }
+  })
+
+  depends_on = [
+    helm_release.karpenter_crd,
+  ]
+}
+
 resource "kubectl_manifest" "karpenter_nodepool_ondemand" {
   yaml_body = yamlencode({
     apiVersion = "karpenter.sh/v1"
     kind       = "NodePool"
     metadata = {
-      name = "ondemand-arm64"
+      name = "arm64-default"
     }
     spec = {
       template = {

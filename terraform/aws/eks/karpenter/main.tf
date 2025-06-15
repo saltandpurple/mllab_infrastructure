@@ -87,50 +87,6 @@ resource "helm_release" "karpenter" {
   ]
 }
 
-resource "kubectl_manifest" "karpenter_amazon_linux_node_class" {
-  provider = kubectl
-  yaml_body = yamlencode({
-    apiVersion = "karpenter.k8s.aws/v1"
-    kind       = "EC2NodeClass"
-    metadata = {
-      name = "default-al2"
-    }
-    spec = {
-      amiFamily = "AL2"
-      amiSelectorTerms = [{
-        alias = "al2@latest"
-      }]
-      subnetSelectorTerms = [
-        for subnet_id in var.eks_cluster_subnet_ids : {
-          id = subnet_id
-        }
-      ]
-      securityGroupSelectorTerms = [{
-        id = data.aws_security_group.sg_eks_worker_node.id
-      }]
-      instanceProfile = module.karpenter_aws_resources.instance_profile_name
-      blockDeviceMappings = [
-        {
-          # Root device
-          deviceName = "/dev/xvda"
-          ebs = {
-            volumeSize = "100Gi"
-            volumeType = "gp3"
-            encrypted  = true
-            kmsKeyID   = var.ebs_kms_key_id
-          }
-        },
-      ]
-      # https://karpenter.sh/v1.2/concepts/nodeclasses/#specinstancestorepolicy
-      instanceStorePolicy = "RAID0"
-      detailedMonitoring = false
-    }
-  })
-
-  depends_on = [
-    helm_release.karpenter_crd,
-  ]
-}
 
 
 ## Permission stuff

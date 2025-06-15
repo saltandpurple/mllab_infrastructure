@@ -6,7 +6,7 @@
 *.iml
 
 # Terraform
-*secret.tfvars
+*secret*.tfvars
 */.terraform/
 .terraform/
 *.tfstate
