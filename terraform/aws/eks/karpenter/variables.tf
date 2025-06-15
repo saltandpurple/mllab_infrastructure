@@ -23,3 +23,17 @@ variable "karpenter_helm_release_version" {
   type        = string
   description = "Version of Karpenter (and CRDs) that will be installed."
 }
+
+variable "cluster_endpoint" {
+  type = string
+  description = "Cluster https endpoint"
+}
+
+variable "cluster_certificate_authority_data" {
+  type = string
+}
+
+variable "eks_oidc_provider_arn" {
+  type = string
+  description = "OIDC provider ARN of the cluster this is installed to"
+}

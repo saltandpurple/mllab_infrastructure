@@ -7,7 +7,7 @@ module "karpenter_aws_resources" {
   enable_pod_identity    = false
   create_iam_role        = true
   create_access_entry    = true
-  irsa_oidc_provider_arn = local.eks_oidc_provider_arn
+  irsa_oidc_provider_arn = var.eks_oidc_provider_arn
   # Using the kube-system namespace to avoid rate limiting from the EKS APIServer.
   irsa_namespace_service_accounts = ["kube-system:karpenter"]
   create_instance_profile         = true
@@ -123,7 +123,6 @@ resource "kubectl_manifest" "karpenter_amazon_linux_node_class" {
       ]
       # https://karpenter.sh/v1.2/concepts/nodeclasses/#specinstancestorepolicy
       instanceStorePolicy = "RAID0"
-      metadataOptions = var.nodeclass_metadata_options
       detailedMonitoring = false
     }
   })
@@ -140,9 +139,9 @@ resource "kubectl_manifest" "karpenter_amazon_linux_node_class" {
 # Creates and grants Access to SQS which provides advanced warning for Spot
 # Interruption events (~2min).
 # https://karpenter.sh/docs/concepts/disruption/#interruption
-resource "aws_iam_service_linked_role" "karpenter_spot" {
-  aws_service_name = "spot.amazonaws.com"
-}
+# resource "aws_iam_service_linked_role" "karpenter_spot" {
+#   aws_service_name = "spot.amazonaws.com"
+# }
 
 data "aws_iam_policy_document" "ebs_kms_policy" {
   statement {

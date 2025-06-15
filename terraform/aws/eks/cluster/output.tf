@@ -17,3 +17,7 @@ output "eks_node_security_group_id" {
 output "oidc_provider_arn" {
   value = module.eks.oidc_provider_arn
 }
+
+output "ebs_kms_key_id" {
+  value = module.ebs_kms_key.key_id
+}
