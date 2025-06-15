@@ -56,14 +56,17 @@ resource "kubectl_manifest" "karpenter_nodepool_ondemand" {
             {
               key      = "karpenter.k8s.aws/instance-family"
               operator = "In"
-              values   = ["r7g", "r6g"]
+              values   = ["r8g", "r7g", "r6g", "m7g", "m8g"]
             },
+            
             {
               key      = "karpenter.k8s.aws/instance-size"
               operator = "In"
-              # Since we hardcode the maxPods to 110, do not use `medium`,
-              # any large or higher instance can run at least 110 pods.
-              values = ["large", "xlarge", "2xlarge"]
+              values = ["medium", "large", "xlarge"]
+            },
+            {
+              key      = "karpenter.k8s.aws/instance-local-nvme"
+              operator = "DoesNotExist"
             },
           ])
         }
