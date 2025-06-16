@@ -55,7 +55,7 @@ resource "kubectl_manifest" "application_of_applications" {
       spec:
         project: default
         source:
-          repoURL: 'ssh://git@github.com:saltandpurple/mllab_infrastructure.git'
+          repoURL: 'https://github.com/saltandpurple/mllab_infrastructure'
           path: argocd/aws/applications
           targetRevision: master
         destination:
