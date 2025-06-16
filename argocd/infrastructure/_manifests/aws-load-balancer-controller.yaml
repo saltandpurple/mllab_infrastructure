@@ -3,32 +3,19 @@ kind: Application
 metadata:
   name: aws-load-balancer-controller
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  sources:
-    - repoURL: ssh://git@git.neozocloud.com:10022/argocd/base.git
-      targetRevision: HEAD
-      ref: base_values
-
-    - repoURL: ssh://git@git.neozocloud.com:10022/tenants/hsp.git
-      targetRevision: HEAD
-      ref: tenant_values
-
-    - repoURL: https://aws.github.io/eks-charts
-      chart: aws-load-balancer-controller
-      targetRevision: 1.6.2
-      helm:
-        valueFiles:
-          - $base_values/AWS/load-balancer-controller/values.yaml
-          - $tenant_values/argocd/prod/infrastructure/aws-load-balancer-controller/values.yaml
-
+  source:
+      repoURL: "https://github.com/saltandpurple/mllab_infrastructure"
+      path: argocd-infrastructure/aws-load-balancer-controller
+      targetRevision: MB/argocd
   destination:
     namespace: kube-system
     name: in-cluster
   syncPolicy:
     automated: {}
+
+  # leads to annoying permanent out-of-sync stuff otherwise
   ignoreDifferences:
     - group: ""
       kind: Secret

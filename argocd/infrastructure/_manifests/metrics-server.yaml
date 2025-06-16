@@ -4,10 +4,10 @@ metadata:
   name: metrics-server
   namespace: argocd
 spec:
-  project: hsp
+  project: default
   source:
-    repoURL: 'ssh://git@git.neozocloud.com:10022/tenants/hsp.git'
-    path: argocd/prod/infrastructure/metrics-server
+    repoURL: 'https://github.com/saltandpurple/mllab_infrastructure'
+    path: argocd/infrastructure/metrics-server
     targetRevision: master
     helm:
       valueFiles:

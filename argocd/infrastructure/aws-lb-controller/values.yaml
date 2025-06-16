@@ -1,0 +1,4 @@
+clusterName: hsp-prod
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::211125367377:role/eks-hsp-prod-aws-lb-controller-irsa
