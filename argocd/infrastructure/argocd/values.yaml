@@ -7,8 +7,6 @@ server:
       - argocd.mllab.davidsfreun.de
   metrics:
     enabled: true
-    serviceMonitor:
-      enabled: true
 
 notifications:
   enabled: true
@@ -26,3 +24,4 @@ controller:
     requests:
       cpu: 100m
       memory: 512Mi
+
