@@ -1,4 +1,6 @@
-clusterName: hsp-prod
+clusterName: mllab
 serviceAccount:
+  create: true
+  name: aws-load-balancer-controller
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::211125367377:role/eks-hsp-prod-aws-lb-controller-irsa
+    eks.amazonaws.com/role-arn: arn:aws:iam::115801844135:role/eks-mllab-aws-lb-controller-irsa
