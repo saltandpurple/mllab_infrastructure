@@ -7,7 +7,7 @@ spec:
   project: default
   source:
       repoURL: "https://github.com/saltandpurple/mllab_infrastructure"
-      path: argocd-infrastructure/aws-load-balancer-controller
+      path: argocd/infrastructure/aws-lb-controller
       targetRevision: MB/argocd
   destination:
     namespace: kube-system
