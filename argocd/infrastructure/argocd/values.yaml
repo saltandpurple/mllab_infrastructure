@@ -1,10 +1,12 @@
 # https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
 argo-cd:
+  global:
+    domain: argocd.mllab.davidsfreun.de
   server:
     ingress:
       enabled: true
       ingressClassName: "nginx"
-      hosts:
+      extraHosts:
         - argocd.mllab.davidsfreun.de
     metrics:
       enabled: true
