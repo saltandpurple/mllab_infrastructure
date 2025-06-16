@@ -32,7 +32,7 @@ resource "helm_release" "argocd" {
 
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
-  version    = "5.45.1"
+  version    = "8.1.0"
 
   set {
     name  = "crds.install"
@@ -56,7 +56,7 @@ resource "kubectl_manifest" "application_of_applications" {
         project: default
         source:
           repoURL: 'ssh://git@github.com:saltandpurple/mllab_infrastructure.git'
-          path: argocd/dev/applications
+          path: argocd/aws/applications
           targetRevision: master
         destination:
           server: 'https://kubernetes.default.svc'
