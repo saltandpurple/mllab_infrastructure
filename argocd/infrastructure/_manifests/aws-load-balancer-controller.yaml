@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-load-balancer-controller
+  namespace: argocd
+spec:
+  project: default
+  source:
+      repoURL: "https://github.com/saltandpurple/mllab_infrastructure"
+      path: argocd/infrastructure/aws-lb-controller
+      targetRevision: MB/argocd
+  destination:
+    namespace: kube-system
+    name: in-cluster
+  syncPolicy:
+    automated: {}
+
+  # leads to annoying permanent out-of-sync stuff otherwise
+  ignoreDifferences:
+    - group: ""
+      kind: Secret
+      name: aws-load-balancer-tls
+      jsonPointers:
+        - /data/ca.crt
+        - /data/tls.crt
+        - /data/tls.key
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      jsonPointers:
+        - /webhooks/0/clientConfig/caBundle
+        - /webhooks/1/clientConfig/caBundle
+        - /webhooks/2/clientConfig/caBundle
+        - /webhooks/3/clientConfig/caBundle
+        - /webhooks/4/clientConfig/caBundle
+        - /webhooks/5/clientConfig/caBundle
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      jsonPointers:
+        - /webhooks/0/clientConfig/caBundle
+        - /webhooks/1/clientConfig/caBundle
+        - /webhooks/2/clientConfig/caBundle
+        - /webhooks/3/clientConfig/caBundle
+        - /webhooks/4/clientConfig/caBundle
+        - /webhooks/5/clientConfig/caBundle

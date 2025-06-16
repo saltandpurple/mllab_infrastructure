@@ -56,7 +56,7 @@ resource "kubectl_manifest" "application_of_applications" {
         project: default
         source:
           repoURL: 'https://github.com/saltandpurple/mllab_infrastructure'
-          path: argocd/aws/applications
+          path: argocd/infrastructure/_manifests
           targetRevision: master
         destination:
           server: 'https://kubernetes.default.svc'

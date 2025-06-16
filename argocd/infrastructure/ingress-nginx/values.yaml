@@ -1,0 +1,66 @@
+# https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
+ingress-nginx:
+  pdb:
+    create: true
+  controller:
+    admissionWebhooks:
+      enabled: false
+    ingressClassResource:
+      default: true
+    targetPorts:
+      https: http # TLS termination at NLB
+    service:
+      type: LoadBalancer
+      externalTrafficPolicy: Local
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-type: external
+        service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+        service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: instance
+        service.beta.kubernetes.io/aws-load-balancer-name: nginx-ingress-mllab
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-central-1:115801844135:certificate/42286855-753d-4a9f-90ef-c0b31294f3d0 # *.mllab.davidsfreun.de
+        service.beta.kubernetes.io/aws-load-balancer-subnets: "subnet-00ccf18d43cdb9492, subnet-0d37e8896cc6ddc6a, subnet-0fa298f345560f929"
+        service.beta.kubernetes.io/aws-load-balancer-backend-protocol: ssl
+        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: 443
+    metrics:
+      enabled: true
+    replicaCount: 2
+    containerPort:
+      http: 80
+      https: 443
+    extraArgs:
+      http-port: 80
+      https-port: 443
+    config:
+      annotations-risk-level: Critical
+      annotation-value-word-blocklist: "load_module,lua_package,_by_lua,location,root,proxy_pass,serviceaccount,{,},'"
+      allow-snippet-annotations: true
+      force-ssl-redirect: true
+      # JSON format for logging:
+      log-format-escape-json: "true"
+      log-format-upstream: '{
+        "@timestamp": "$time_iso8601",
+        "remote_addr": "$remote_addr",
+        "remote_port": "$remote_port",
+        "http_x_forwarded_for": "$proxy_add_x_forwarded_for",
+        "request_id": "$request_id",
+        "remote_user": "$remote_user",
+        "bytes_sent": $bytes_sent,
+        "request_time": $request_time,
+        "vhost": "$host",
+        "scheme": "$scheme",
+        "uri": "$uri",
+        "request_uri": "$request_uri",
+        "request_query": "$args",
+        "request_length": $request_length,
+        "request_time": $request_time,
+        "http_method": "$request_method",
+        "http_referrer": "$http_referer",
+        "http_user_agent": "$http_user_agent" ,
+        "http_status": "$status",
+        "upstream_cache_status": "$upstream_cache_status",
+        "upstream_response_time": "$upstream_response_time",
+        "upstream_connect_time": "$upstream_connect_time",
+        "upstream_response_status": "$upstream_status",
+        "upstream_addr": "$upstream_addr"
+      }'
+

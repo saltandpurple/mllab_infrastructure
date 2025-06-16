@@ -68,6 +68,12 @@ resource "kubectl_manifest" "karpenter_amazon_linux_node_class" {
       # https://karpenter.sh/v1.2/concepts/nodeclasses/#specinstancestorepolicy
       instanceStorePolicy = "RAID0"
       detailedMonitoring = false
+      metadataOptions = {
+        httpEndpoint = "enabled"
+        httpProtocolIPv6 = "disabled"
+        httpPutResponseHopLimit = 2 # required to allow metadata access from pods
+        httpTokens = "required"
+      }
     }
   })
 
