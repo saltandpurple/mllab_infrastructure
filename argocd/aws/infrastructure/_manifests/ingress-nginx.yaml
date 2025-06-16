@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-nginx-internal
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: hsp
+  sources:
+    - repoURL: ssh://git@git.neozocloud.com:10022/tenants/hsp.git
+      targetRevision: master
+      ref: tenant_values
+
+    - repoURL: https://kubernetes.github.io/ingress-nginx
+      chart: ingress-nginx
+      targetRevision: 4.12.3
+      helm:
+        valueFiles:
+          - $base_values/ingress-nginx/values.yaml
+          - $tenant_values/argocd/prod/infrastructure/ingress-nginx/internal-values.yaml
+
+  destination:
+    namespace: ingress-nginx
+    name: in-cluster
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated: {}
