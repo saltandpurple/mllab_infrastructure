@@ -2,12 +2,19 @@
 argo-cd:
   global:
     domain: "argocd.mllab.davidsfreun.de"
+
+  configs:
+    params:
+      server.insecure: true
+
   server:
     ingress:
       enabled: true
       ingressClassName: "nginx"
       hosts:
         - argocd.mllab.davidsfreun.de
+#      annotations:
+#        "nginx.ingress.kubernetes.io/backend-protocol": "HTTP"
     metrics:
       enabled: true
 
