@@ -1,5 +1,7 @@
 mlflow:
   tracking:
+    persistence:
+      storageClass: gp3-retain
     metrics:
       enabled: true
     ingress:
