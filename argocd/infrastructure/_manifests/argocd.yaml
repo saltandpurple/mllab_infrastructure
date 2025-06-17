@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: "https://github.com/saltandpurple/mllab_infrastructure"
     path: argocd/infrastructure/argocd
-    targetRevision: MB/argocd
+    targetRevision: master
   destination:
     namespace: argocd
     name: in-cluster

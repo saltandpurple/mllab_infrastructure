@@ -8,7 +8,7 @@ spec:
   source:
       repoURL: "https://github.com/saltandpurple/mllab_infrastructure"
       path: argocd/infrastructure/aws-lb-controller
-      targetRevision: MB/argocd
+      targetRevision: master
   destination:
     namespace: kube-system
     name: in-cluster

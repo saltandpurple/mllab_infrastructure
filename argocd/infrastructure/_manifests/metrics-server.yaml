@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/saltandpurple/mllab_infrastructure'
     path: argocd/infrastructure/metrics-server
-    targetRevision: MB/argocd
+    targetRevision: master
     helm:
       valueFiles:
         - values.yaml
