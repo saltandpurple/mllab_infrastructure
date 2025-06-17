@@ -1,0 +1,13 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: gp3-retain-backup
+provisioner: ebs.csi.aws.com
+parameters:
+  fsType: ext4
+  type: gp3
+  encrypted: "true"
+  tagSpecification_2: "AWSBackup=true"
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
