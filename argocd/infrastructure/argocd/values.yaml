@@ -1,27 +1,37 @@
 # https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
-server:
-  ingress:
-    enabled: true
-    ingressClassName: "nginx"
-    hosts:
-      - argocd.mllab.davidsfreun.de
-  metrics:
-    enabled: true
+argo-cd:
+  global:
+    domain: "argocd.mllab.davidsfreun.de"
 
-notifications:
-  enabled: true
-  secret:
-    create: false
-  cm:
-    create: false
+  configs:
+    params:
+      server.insecure: true
 
-controller:
-  metrics:
+  server:
+    ingress:
+      enabled: true
+      ingressClassName: "nginx"
+      hosts:
+        - argocd.mllab.davidsfreun.de
+#      annotations:
+#        "nginx.ingress.kubernetes.io/backend-protocol": "HTTP"
+    metrics:
+      enabled: true
+
+  notifications:
     enabled: true
-  resources:
-    limits:
-      memory: 2Gi
-    requests:
-      cpu: 100m
-      memory: 512Mi
+    secret:
+      create: false
+    cm:
+      create: false
+
+  controller:
+    metrics:
+      enabled: true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        cpu: 100m
+        memory: 512Mi
 

@@ -4,35 +4,15 @@ metadata:
   name: argocd
   namespace: argocd
 spec:
-  project: hsp
-  sources:
-    - repoURL: ssh://git@git.neozocloud.com:10022/tenants/hsp.git
-      targetRevision: master
-      ref: tenant_values
-
-    - repoURL: ssh://git@git.neozocloud.com:10022/argocd/base.git
-      targetRevision: HEAD
-      ref: base_values
-
-    - repoURL: https://argoproj.github.io/argo-helm
-      chart: argo-cd
-      targetRevision: 5.45.1
-      helm:
-        valueFiles:
-          - $base_values/argocd/values.yaml
-          - $tenant_values/argocd/prod/infrastructure/argocd/values.yaml
-
-    - repoURL: ssh://git@git.neozocloud.com:10022/tenants/hsp.git
-      targetRevision: master
-      path: argocd/prod/infrastructure/argocd/manifests/
-
-    - repoURL: git@gitlab.crunchtime.net/devops/argocd.git
-      targetRevision: main
-      path: prod/argocd-manifests
+  project: default
+  source:
+    repoURL: "https://github.com/saltandpurple/mllab_infrastructure"
+    path: argocd/infrastructure/argocd
+    targetRevision: MB/argocd
   destination:
     namespace: argocd
     name: in-cluster
   syncPolicy:
-#    automated: {}
+    automated: {}
     syncOptions:
       - CreateNamespace=true
