@@ -1,0 +1,7 @@
+mlflow:
+  tracking:
+    metrics:
+      enabled: true
+    ingress:
+      enabled: true
+    hostname: "mlflow.mllab.davidsfreun.de"
