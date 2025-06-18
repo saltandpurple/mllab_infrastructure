@@ -34,23 +34,11 @@ module "eks" {
   create_cloudwatch_log_group            = true
   dataplane_wait_duration                = "10m"
 
-  # Delegates KMS Permissions to AWS IAM
   kms_key_enable_default_policy = true
 
   authentication_mode = "API_AND_CONFIG_MAP" # default
   enable_irsa         = true
 
-  # Explanation for Fargate Pod Sizing
-  # Important: Only requests matter, since the VM size for the Pod is
-  #            determined during initial start of the Pod and
-  #            _cannot be resized afterwards.
-  # Read the documentation: https://docs.aws.amazon.com/eks/latest/userguide/fargate-pod-configuration.html
-  # TL;DR:
-  # - vCPU count determines the maximum Memory possible
-  # - If you choose more memory than the vCPU count supports, a higher tier is chosen
-  # - 256 MB is always added for the kubelet, kube-proxy and containerd
-  # - The k8s node size _may_ be bigger than the capacity available for the pod:
-  #   -> check the annotation "CapacityProvisioned" on the Pod
   fargate_profiles = {
     kube-system = {
       name          = "kube-system-apps"
@@ -66,7 +54,6 @@ module "eks" {
 
   cluster_addons = {
     coredns = {
-      # Setting preserve to true will retain config changes to addons when updating.
       preserve      = true
       most_recent   = var.coredns_addon_version == null ? true : false
       addon_version = var.coredns_addon_version
@@ -113,8 +100,6 @@ module "eks" {
       source_cluster_security_group = true
     }
 
-    # Many 3rd-party images expose port 80 hardcoded.
-    # In order for them to be usable in our setup (without rebuilding of the image) we expose port 80 for node to node traffic.
     eks_ingress_http = {
       description              = "Allow node to node HTTP traffic"
       protocol                 = "tcp"
@@ -127,14 +112,7 @@ module "eks" {
   tags = var.eks_tags
 }
 
-# --- Fargate Security Group Policy
-# This makes sure that the pods running on Fargate use the
-# node security group (otherwise they would use the cluster
-# security group that should be attached to the control plane)
-# Important: You might have to restart all fargate pods to make
-# sure the correct one is attached.
-# SG Used by the Pod can be found via annotation:
-#   `fargate.amazonaws.com/pod-sg: sg-<ID>`
+# Fargate nodes need to use the correct SG
 resource "kubectl_manifest" "fargate_kube_system_security_group_policy" {
   yaml_body = yamlencode({
     apiVersion = "vpcresources.k8s.aws/v1beta1"
@@ -145,9 +123,6 @@ resource "kubectl_manifest" "fargate_kube_system_security_group_policy" {
     }
     spec = {
       podSelector = {
-        # EBS Addon will attach the label to every Pod (incld. the daemonset)
-        # which in turn will require SecurityGroup for Pods support on nodes
-        # (which we don't use at the moment).
         matchExpressions = [{
           key      = "app"
           operator = "NotIn"
@@ -163,27 +138,6 @@ resource "kubectl_manifest" "fargate_kube_system_security_group_policy" {
     }
   })
 }
-
-# resource "kubectl_manifest" "fargate_kyverno_security_group_policy" {
-#   yaml_body = yamlencode({
-#     apiVersion = "vpcresources.k8s.aws/v1beta1"
-#     kind       = "SecurityGroupPolicy"
-#     metadata = {
-#       name      = "fargate-policy"
-#       namespace = "kyverno"
-#     }
-#     spec = {
-#       podSelector = {
-#         matchLabels = {
-#           "ml.lab/runOnFargate" = "true"
-#         }
-#       }
-#       securityGroups = {
-#         groupIds = [module.eks.node_security_group_id]
-#       }
-#     }
-#   })
-# }
 
 
 # IRSA
