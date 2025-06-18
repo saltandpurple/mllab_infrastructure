@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: "https://github.com/saltandpurple/mllab_infrastructure"
     path: argocd/infrastructure/storage-classes
-    targetRevision: MB/mlflow
+    targetRevision: master
   destination:
     namespace: kube-system
     name: in-cluster
