@@ -1,0 +1,10 @@
+apiVersion: v2
+name: mlflow
+type: application
+version: 0.0.1
+appVersion: "1.0"
+
+dependencies:
+  - name: mlflow
+    version: 5.0.1
+    repository: https://charts.bitnami.com/bitnami
