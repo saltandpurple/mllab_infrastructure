@@ -23,7 +23,7 @@ brew install sops yq
 ### 1. Edit & apply secrets
 
 1. Run `terraform plan` - Terraform automatically decrypts `secrets.enc.yaml` → `secret.auto.tfvars`
-2. Edit `secret.auto.tfvars` with changed/new values -> add variable-refs for ssm param store as well, obviously
+2. Edit `secret.auto.tfvars` with changed/new values -> add variable-refs in terraform as well, obviously
 3. Run `terraform apply` - Terraform deploys the secrets to the param store and encrypts the tfvars-file
 
 The secret is now encrypted and stored in AWS Parameter Store.

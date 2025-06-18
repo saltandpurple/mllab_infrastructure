@@ -23,6 +23,8 @@ resource "null_resource" "decrypt_secrets" {
       echo "Decrypted secrets.enc.yaml to secret.auto.tfvars"
     EOT
   }
+
+  depends_on = [aws_kms_alias.secrets]
 }
 
 resource "terraform_data" "encrypt_secrets" {
@@ -51,6 +53,8 @@ resource "aws_ssm_parameter" "mlflow-postgres" {
   tags = {
     Environment = "mllab"
   }
+
+  depends_on = [aws_kms_alias.secrets]
 }
 
 
