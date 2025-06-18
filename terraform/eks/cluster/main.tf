@@ -236,6 +236,58 @@ module "aws_lb_controller_irsa" {
   }
 }
 
+module "external_secrets_irsa" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "~>5.33"
+
+  role_name = "eks-${var.eks_cluster_name}-external-secrets-irsa"
+
+  # Custom policy for accessing Parameter Store
+  role_policy_arns = {
+    ssm_policy = aws_iam_policy.external_secrets_ssm_policy.arn
+  }
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["external-secrets:external-secrets-operator"]
+    }
+  }
+}
+
+# IAM policy for External Secrets to access Parameter Store
+resource "aws_iam_policy" "external_secrets_ssm_policy" {
+  name        = "eks-${var.eks_cluster_name}-external-secrets-ssm"
+  description = "Policy for External Secrets Operator to access Parameter Store"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:GetParameter",
+          "ssm:GetParameters",
+          "ssm:GetParametersByPath"
+        ]
+        Resource = "arn:aws:ssm:*:*:parameter/mllab/*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt"
+        ]
+        Resource = "arn:aws:kms:*:*:key/*"
+        Condition = {
+          StringEquals = {
+            "kms:ViaService" = "ssm.*.amazonaws.com"
+          }
+        }
+      }
+    ]
+  })
+}
+
 # todo: s3 policy
 
 # EBS KMS Key
