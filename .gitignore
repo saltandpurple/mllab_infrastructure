@@ -6,13 +6,21 @@
 *.iml
 
 # Terraform
-*secret*.tfvars
 */.terraform/
 .terraform/
 *.tfstate
 *.tfstate.*
+#*.tfvars
+*secret*.tfvars
+*.tfvars.json
+*secret.auto.tfvars
 
 .terraform.lock.hcl
 .terraform.tfstate.lock.info
 
 *kubeconfig-mllab
+
+# Claude
+.claude
+*.claude/
+claude.md
