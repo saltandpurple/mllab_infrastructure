@@ -232,17 +232,11 @@ resource "aws_iam_policy" "external_secrets_ssm_policy" {
           "kms:Decrypt"
         ]
         Resource = "arn:aws:kms:*:*:key/*"
-        Condition = {
-          StringEquals = {
-            "kms:ViaService" = "ssm.*.amazonaws.com"
-          }
-        }
       }
     ]
   })
 }
 
-# todo: s3 policy
 
 # EBS KMS Key
 module "ebs_kms_key" {
