@@ -2,7 +2,7 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: mlflow-postgresql
-  namespace: external-secrets
+  namespace: mlflow
 spec:
   refreshInterval: 1h
   secretStoreRef:
