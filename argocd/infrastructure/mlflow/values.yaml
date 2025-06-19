@@ -3,6 +3,8 @@ mlflow:
     auth:
       existingSecret: "mlflow-postgresql"
   tracking:
+    auth:
+      existingSecret: "mlflow-tracking"
     persistence:
       storageClass: gp3
     metrics:
