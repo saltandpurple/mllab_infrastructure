@@ -1,0 +1,45 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: argocd-admin
+  namespace: argocd
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-parameter-store
+    kind: ClusterSecretStore
+  target:
+    name: argocd-admin
+    creationPolicy: Owner
+  data:
+    - secretKey: admin-password
+      remoteRef:
+        key: /mllab/argocd/admin-pw
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: argocd-github-app
+  namespace: argocd
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-parameter-store
+    kind: ClusterSecretStore
+  target:
+    name: argocd-github-app
+    creationPolicy: Owner
+    template:
+      metadata:
+        labels:
+          argocd.argoproj.io/secret-type: repository
+      data:
+        type: git
+        url: "{{ .url }}"
+        project: default
+        githubAppID: "{{ .githubAppID }}"
+        githubAppInstallationID: "{{ .githubAppInstallationID }}"
+        githubAppPrivateKey: "{{ .githubAppPrivateKey }}"
+  dataFrom:
+    - extract:
+        key: /mllab/argocd/github-app-repo
