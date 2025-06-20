@@ -24,3 +24,17 @@ variable "mlflow-flask-server-secret-key" {
   default = "" # required, so the tf plan doesn't fail
   description = "Secret key for Flask server in MLflow"
 }
+
+variable "argocd-admin-pw" {
+  type = string
+  sensitive = true
+  default = "" # required, so the tf plan doesn't fail
+  description = "Password for ArgoCD admin user"
+}
+
+variable "argocd-github-app-repo" {
+  type = string
+  sensitive = true
+  default = "" # required, so the tf plan doesn't fail
+  description = "GitHub App repository configuration for ArgoCD (JSON format with url, githubAppID, githubAppInstallationID, githubAppPrivateKey)"
+}

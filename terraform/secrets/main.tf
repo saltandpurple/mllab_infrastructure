@@ -41,6 +41,8 @@ resource "terraform_data" "encrypt_secrets" {
   # just to ensure it doesn't overwrite stuff
   depends_on = [
     aws_ssm_parameter.mlflow-postgres,
+    aws_ssm_parameter.argocd_admin_pw,
+    aws_ssm_parameter.argocd_github_app_repo,
   ]
 }
 
@@ -92,6 +94,34 @@ resource "aws_ssm_parameter" "mlflow_flask_server_secret_key" {
   description = "MLflow Flask server secret key"
   type        = "SecureString"
   value       = var.mlflow-flask-server-secret-key
+  key_id      = aws_kms_key.secret_encryption.key_id
+
+  tags = {
+    Environment = "mllab"
+  }
+
+  depends_on = [aws_kms_alias.secrets]
+}
+
+resource "aws_ssm_parameter" "argocd_admin_pw" {
+  name        = "/mllab/argocd/admin-pw"
+  description = "ArgoCD admin password"
+  type        = "SecureString"
+  value       = var.argocd-admin-pw
+  key_id      = aws_kms_key.secret_encryption.key_id
+
+  tags = {
+    Environment = "mllab"
+  }
+
+  depends_on = [aws_kms_alias.secrets]
+}
+
+resource "aws_ssm_parameter" "argocd_github_app_repo" {
+  name        = "/mllab/argocd/github-app-repo"
+  description = "ArgoCD GitHub App repository configuration"
+  type        = "SecureString"
+  value       = var.argocd-github-app-repo
   key_id      = aws_kms_key.secret_encryption.key_id
 
   tags = {
