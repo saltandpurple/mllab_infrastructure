@@ -10,7 +10,7 @@
 .terraform/
 *.tfstate
 *.tfstate.*
-*.tfvars
+#*.tfvars
 *secret*.tfvars
 *.tfvars.json
 *secret.auto.tfvars
