@@ -82,7 +82,7 @@ resource "kubectl_manifest" "karpenter_amazon_linux_node_class" {
   ]
 }
 
-resource "kubectl_manifest" "karpenter_nodepool_ondemand" {
+resource "kubectl_manifest" "karpenter_nodepool_spot" {
   yaml_body = yamlencode({
     apiVersion = "karpenter.sh/v1"
     kind       = "NodePool"
@@ -102,7 +102,7 @@ resource "kubectl_manifest" "karpenter_nodepool_ondemand" {
             {
               key      = "karpenter.sh/capacity-type"
               operator = "In"
-              values   = ["on-demand"]
+              values   = ["spot"]
             },
             {
               key      = "karpenter.k8s.aws/instance-family"
