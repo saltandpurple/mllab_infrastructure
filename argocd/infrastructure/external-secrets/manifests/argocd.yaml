@@ -1,7 +1,7 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: argocd-admin
+  name: argocd-initial-admin-secret
   namespace: argocd
 spec:
   refreshInterval: 1h
@@ -9,7 +9,7 @@ spec:
     name: aws-parameter-store
     kind: ClusterSecretStore
   target:
-    name: argocd-admin
+    name: argocd-initial-admin-secret
     creationPolicy: Owner
   data:
     - secretKey: admin-password
