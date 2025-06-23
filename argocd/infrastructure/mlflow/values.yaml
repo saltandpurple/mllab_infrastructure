@@ -10,5 +10,5 @@ mlflow:
     metrics:
       enabled: true
     ingress:
-      enabled: true
+      enabled: false
     hostname: "mlflow.mllab.davidsfreun.de"
