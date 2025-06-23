@@ -12,7 +12,7 @@ resource "aws_security_group" "eks_control_plane_additional_rules" {
   }
 
   tags = {
-    Name = "eks_control_plane_additional_rules"
+    Name        = "eks_control_plane_additional_rules"
     Environment = "mllab"
   }
 }
@@ -26,29 +26,32 @@ module "eks" {
   enable_cluster_creator_admin_permissions = true
 
   cluster_endpoint_private_access = true
-  cluster_endpoint_public_access  = true
+  cluster_endpoint_public_access  = false
   cluster_additional_security_group_ids = concat(
     [aws_security_group.eks_control_plane_additional_rules.id],
   )
+  cluster_upgrade_policy = "STANDARD"
 
   create_cloudwatch_log_group = false
-  dataplane_wait_duration                = "10m"
+  dataplane_wait_duration     = "10m"
 
   kms_key_enable_default_policy = true
 
   authentication_mode = "API_AND_CONFIG_MAP" # default
-  enable_irsa         = true
+  enable_irsa = true
 
   fargate_profiles = {
     kube-system = {
       name          = "kube-system-apps"
       iam_role_name = "fargate-${var.eks_cluster_name}"
-      selectors = [{
-        namespace = "kube-system"
-        labels = {
-          "ml.lab/runOnFargate" = true
+      selectors = [
+        {
+          namespace = "kube-system"
+          labels = {
+            "ml.lab/runOnFargate" = true
+          }
         }
-      }]
+      ]
     }
   }
 
@@ -67,9 +70,9 @@ module "eks" {
     }
 
     kube-proxy = {
-      preserve      = true
-      most_recent   = var.kube_proxy_addon_version == null ? true : false
-      addon_version = var.kube_proxy_addon_version
+      preserve                 = true
+      most_recent              = var.kube_proxy_addon_version == null ? true : false
+      addon_version            = var.kube_proxy_addon_version
       service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
     }
 
@@ -123,11 +126,13 @@ resource "kubectl_manifest" "fargate_kube_system_security_group_policy" {
     }
     spec = {
       podSelector = {
-        matchExpressions = [{
-          key      = "app"
-          operator = "NotIn"
-          values   = ["ebs-csi-node"]
-        }]
+        matchExpressions = [
+          {
+            key      = "app"
+            operator = "NotIn"
+            values = ["ebs-csi-node"]
+          }
+        ]
         matchLabels = {
           "ml.lab/runOnFargate" = "true"
         }
@@ -142,7 +147,7 @@ resource "kubectl_manifest" "fargate_kube_system_security_group_policy" {
 
 # IRSA
 module "vpc_cni_irsa" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~>5.58"
 
   # role_name_prefix      = "eks-${var.eks_cluster_name}-vpc-cni-irsa"
@@ -154,7 +159,7 @@ module "vpc_cni_irsa" {
 
   oidc_providers = {
     main = {
-      provider_arn               = module.eks.oidc_provider_arn
+      provider_arn = module.eks.oidc_provider_arn
       namespace_service_accounts = ["kube-system:aws-node"]
     }
   }
@@ -169,7 +174,7 @@ module "csi_irsa" {
 
   oidc_providers = {
     main = {
-      provider_arn               = module.eks.oidc_provider_arn
+      provider_arn = module.eks.oidc_provider_arn
       namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
     }
   }
@@ -184,7 +189,7 @@ module "aws_lb_controller_irsa" {
 
   oidc_providers = {
     main = {
-      provider_arn               = module.eks.oidc_provider_arn
+      provider_arn = module.eks.oidc_provider_arn
       namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
     }
   }
@@ -203,7 +208,7 @@ module "external_secrets_irsa" {
 
   oidc_providers = {
     main = {
-      provider_arn               = module.eks.oidc_provider_arn
+      provider_arn = module.eks.oidc_provider_arn
       namespace_service_accounts = ["external-secrets:external-secrets-operator"]
     }
   }
@@ -244,7 +249,7 @@ module "ebs_kms_key" {
   version = "~>2.1"
 
   description = "EBS Key for ${var.eks_cluster_name}"
-  key_usage   = "ENCRYPT_DECRYPT"
+  key_usage = "ENCRYPT_DECRYPT"
 
   # Delegates Permissions to AWS IAM
   enable_default_policy = true
@@ -260,10 +265,12 @@ module "ebs_kms_key" {
     {
       sid    = "EC2Access"
       effect = "Allow"
-      principals = [{
-        type        = "AWS"
-        identifiers = ["*"]
-      }]
+      principals = [
+        {
+          type = "AWS"
+          identifiers = ["*"]
+        }
+      ]
       actions = [
         "kms:ReEncrypt*",
         "kms:GenerateDataKey*",
@@ -277,12 +284,12 @@ module "ebs_kms_key" {
         {
           test     = "StringEquals"
           variable = "kms:ViaService"
-          values   = ["ec2.${data.aws_region.current.name}.amazonaws.com"]
+          values = ["ec2.${data.aws_region.current.name}.amazonaws.com"]
         },
         {
           test     = "StringEquals"
           variable = "kms:CallerAccount"
-          values   = [data.aws_caller_identity.current.account_id]
+          values = [data.aws_caller_identity.current.account_id]
         }
       ]
     }
