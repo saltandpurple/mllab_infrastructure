@@ -12,5 +12,6 @@ Host aws-bastion
   HostName i-0123456789abcdef0 # obviously use your actual instance ID here
   User ec2-user # if you use Amazon Linux, otherwise adjust as needed
   ProxyCommand sh -c "aws ssm start-session --profile <YOUR_PROFILE> --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p'"
+  IdentityFile ~/.ssh/your-aws-key.pem
 ```
 6. Use `sshuttle` to access all your stuff safely
