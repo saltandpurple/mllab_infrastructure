@@ -13,6 +13,7 @@ resource "aws_security_group" "eks_control_plane_additional_rules" {
 
   tags = {
     Name = "eks_control_plane_additional_rules"
+    Environment = "mllab"
   }
 }
 

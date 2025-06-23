@@ -1,6 +1,5 @@
 # After running this, a manual setup of the connection between argocd and the first repo is required
 
-# Helm cannot update CRDs - so we install them using kubectl
 data "http" "application-crd" {
   url = "https://raw.githubusercontent.com/argoproj/argo-cd/v2.8.4/manifests/crds/application-crd.yaml"
 }
