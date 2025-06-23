@@ -14,11 +14,11 @@ ingress-nginx:
       externalTrafficPolicy: Local
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: external
-        service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+        service.beta.kubernetes.io/aws-load-balancer-scheme: "internal"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: instance
         service.beta.kubernetes.io/aws-load-balancer-name: nginx-ingress-mllab
         service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-central-1:115801844135:certificate/42286855-753d-4a9f-90ef-c0b31294f3d0 # *.mllab.davidsfreun.de
-        service.beta.kubernetes.io/aws-load-balancer-subnets: "subnet-00ccf18d43cdb9492, subnet-0d37e8896cc6ddc6a, subnet-0fa298f345560f929"
+        service.beta.kubernetes.io/aws-load-balancer-subnets: "subnet-073aa63eedad20a46, subnet-0ddc4b4c537a8f120, subnet-0c6b1d344e392b7c5"
         service.beta.kubernetes.io/aws-load-balancer-backend-protocol: ssl
         service.beta.kubernetes.io/aws-load-balancer-ssl-ports: 443
     metrics:
