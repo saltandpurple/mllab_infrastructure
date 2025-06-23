@@ -39,6 +39,7 @@ resource "aws_security_group" "bastion_sg" {
 
   tags = {
     Name = "bastion-host-sg"
+    Environment = "mllab"
   }
 }
 
