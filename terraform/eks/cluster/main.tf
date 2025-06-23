@@ -30,8 +30,7 @@ module "eks" {
     [aws_security_group.eks_control_plane_additional_rules.id],
   )
 
-  cloudwatch_log_group_retention_in_days = 14
-  create_cloudwatch_log_group            = true
+  create_cloudwatch_log_group = false
   dataplane_wait_duration                = "10m"
 
   kms_key_enable_default_policy = true
