@@ -15,6 +15,6 @@ resource "aws_route53_record" "wildcard" {
   type    = "CNAME"
   zone_id = local.zone_id
   ttl     = 300
-  records = ["nginx-ingress-mllab-47b8f8be27a46ccc.elb.eu-central-1.amazonaws.com"]
+  records = ["nginx-ingress-mllab-9cbbb431c5057762.elb.eu-central-1.amazonaws.com"]
 }
 
