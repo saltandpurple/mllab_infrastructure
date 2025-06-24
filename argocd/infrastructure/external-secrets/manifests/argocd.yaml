@@ -1,7 +1,7 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: argocd-initial-admin-secret
+  name: argocd-admin
   namespace: argocd
 spec:
   refreshInterval: 1h
@@ -12,7 +12,7 @@ spec:
     name: argocd-initial-admin-secret
     creationPolicy: Owner
   data:
-    - secretKey: admin-password
+    - secretKey: password
       remoteRef:
         key: /mllab/argocd/admin-pw
 ---
