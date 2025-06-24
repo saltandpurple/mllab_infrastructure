@@ -35,7 +35,7 @@ spec:
           argocd.argoproj.io/secret-type: repository
       data:
         type: git
-        url: "{{ .url }}"
+        url: "https://github.com/saltandpurple/mllab_infrastructure"
         project: default
         githubAppID: "{{ .githubAppID }}"
         githubAppInstallationID: "{{ .githubAppInstallationID }}"
