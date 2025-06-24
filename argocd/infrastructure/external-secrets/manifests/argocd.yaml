@@ -37,9 +37,13 @@ spec:
         type: git
         url: "https://github.com/saltandpurple/mllab_infrastructure"
         project: default
-        githubAppID: "{{ .githubAppID }}"
-        githubAppInstallationID: "{{ .githubAppInstallationID }}"
-        githubAppPrivateKey: "{{ .githubAppPrivateKey }}"
+        githubAppID: "{{ .github-app-id }}"
+        githubAppInstallationID: "{{ .github-app-installation-id }}"
+        githubAppPrivateKey: "{{ .github-app-private-key }}"
   dataFrom:
     - extract:
-        key: /mllab/argocd/github-app-repo
+        key: /mllab/argocd/github-app-id
+    - extract:
+        key: /mllab/argocd/github-app-installation-id
+    - extract:
+        key: /mllab/argocd/github-app-private-key
