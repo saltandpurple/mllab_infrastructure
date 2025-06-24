@@ -37,8 +37,8 @@ spec:
         type: git
         url: "https://github.com/saltandpurple/mllab_infrastructure"
         project: default
-        githubAppID: "{{ .github-app-id }}"
-        githubAppInstallationID: "{{ .github-app-installation-id }}"
+        githubAppID: "{{ .github-app-id | quote }}"
+        githubAppInstallationID: "{{ .github-app-installation-id | quote }}"
         githubAppPrivateKey: "{{ .github-app-private-key }}"
   dataFrom:
     - extract:
