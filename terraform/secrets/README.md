@@ -6,7 +6,7 @@ This directory manages secrets for the MLLab cluster using AWS Parameter Store w
 
 1. **You only edit** `secret.auto.tfvars` (gitignored, plaintext)
 2. **Terraform automatically decrypts** from `secrets.enc.yaml` if tfvars doesn't exist (using a dedicated KMS key)
-3. **Terraform automatically encrypts** tfvars → `secrets.enc.yaml` after deployment
+3. **Terraform automatically encrypts** tfvars → `secrets.enc.yaml` after deployment -> this can be safely committed
 4. **Parameter Store encrypts** them using the same KMS key
 5. **External Secrets Operator** reads from Parameter Store and creates Kubernetes secrets
 6. **Applications consume** standard Kubernetes secrets
