@@ -40,16 +40,47 @@ resource "terraform_data" "encrypt_secrets" {
   }
   # just to ensure it doesn't overwrite stuff
   depends_on = [
-    aws_ssm_parameter.mlflow-postgres
+    aws_ssm_parameter.parameters["mlflow_postgres"]
   ]
 }
 
 
-resource "aws_ssm_parameter" "mlflow-postgres" {
-  name        = "/mllab/mlflow/postgres-pw"
-  description = "PW for the MLFlow postgres backend"
+locals {
+  parameters = {
+    "mlflow-postgres" = {
+      description = "PW for the MLFlow postgres backend"
+      value = var.mlflow-postgres-pw
+    },
+    "mlflow-admin-pw" = {
+      description = "MLflow admin password"
+      value = var.mlflow-admin-pw
+    },
+    "mlflow-admin-user" = {
+      description = "MLflow admin username"
+      value = var.mlflow-admin-user
+    },
+    "mlflow-flask-server-secret-key" = {
+      description = "MLflow Flask server secret key"
+      value = var.mlflow-flask-server-secret-key
+    },
+    "argocd-admin-pw" = {
+      description = "ArgoCD admin password"
+      value = var.argocd-admin-pw
+    }
+  }
+}
+
+resource "aws_ssm_parameter" "parameters" {
+  for_each = local.parameters
+
+  # Generate path from key: "mlflow-postgres" → "/mllab/mlflow/postgres-pw"
+  name = format("/mllab/%s/%s",
+    split("-", each.key)[0],  # First part before hyphen (mlflow, argocd)
+    join("-", slice(split("-", each.key), 1, length(split("-", each.key))))
+  )
+  description = each.value.description
   type        = "SecureString"
-  value       = var.mlflow-postgres-pw
+  value       = each.value.value
   key_id      = aws_kms_key.secret_encryption.key_id
 
   tags = {
@@ -58,74 +89,3 @@ resource "aws_ssm_parameter" "mlflow-postgres" {
 
   depends_on = [aws_kms_alias.secrets]
 }
-
-resource "aws_ssm_parameter" "mlflow_admin_pw" {
-  name        = "/mllab/mlflow/admin-pw"
-  description = "MLflow admin password"
-  type        = "SecureString"
-  value       = var.mlflow-admin-pw
-  key_id      = aws_kms_key.secret_encryption.key_id
-
-  tags = {
-    Environment = "mllab"
-  }
-
-  depends_on = [aws_kms_alias.secrets]
-}
-
-resource "aws_ssm_parameter" "mlflow_admin_user" {
-  name        = "/mllab/mlflow/admin-user"
-  description = "MLflow admin username"
-  type        = "SecureString"
-  value       = var.mlflow-admin-user
-  key_id      = aws_kms_key.secret_encryption.key_id
-
-  tags = {
-    Environment = "mllab"
-  }
-
-  depends_on = [aws_kms_alias.secrets]
-}
-
-resource "aws_ssm_parameter" "mlflow_flask_server_secret_key" {
-  name        = "/mllab/mlflow/flask-server-secret-key"
-  description = "MLflow Flask server secret key"
-  type        = "SecureString"
-  value       = var.mlflow-flask-server-secret-key
-  key_id      = aws_kms_key.secret_encryption.key_id
-
-  tags = {
-    Environment = "mllab"
-  }
-
-  depends_on = [aws_kms_alias.secrets]
-}
-
-resource "aws_ssm_parameter" "argocd_admin_pw" {
-  name        = "/mllab/argocd/admin-pw"
-  description = "ArgoCD admin password"
-  type        = "SecureString"
-  value       = var.argocd-admin-pw
-  key_id      = aws_kms_key.secret_encryption.key_id
-
-  tags = {
-    Environment = "mllab"
-  }
-
-  depends_on = [aws_kms_alias.secrets]
-}
-
-# resource "aws_ssm_parameter" "argocd_github_app_repo" {
-#   name        = "/mllab/argocd/github-app-repo"
-#   description = "ArgoCD GitHub App repository configuration"
-#   type        = "SecureString"
-#   value       = var.argocd-github-app-repo
-#   key_id      = aws_kms_key.secret_encryption.key_id
-#
-#   tags = {
-#     Environment = "mllab"
-#   }
-#
-#   depends_on = [aws_kms_alias.secrets]
-# }
-
