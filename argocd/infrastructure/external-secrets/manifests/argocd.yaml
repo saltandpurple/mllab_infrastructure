@@ -9,7 +9,7 @@ spec:
     name: aws-parameter-store
     kind: ClusterSecretStore
   target:
-    name: argocd-initial-admin-secret
+    name: argocd-admin
     creationPolicy: Owner
   data:
     - secretKey: password
