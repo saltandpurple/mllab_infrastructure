@@ -47,7 +47,7 @@ resource "terraform_data" "encrypt_secrets" {
 
 locals {
   parameters = {
-    "mlflow-postgres" = {
+    "mlflow-postgres-pw" = {
       description = "PW for the MLFlow postgres backend"
       value = var.mlflow-postgres-pw
     },
@@ -74,6 +74,10 @@ locals {
     "argocd-github-app-installation-id" = {
       description = "ArgoCD GitHub App installation ID"
       value = var.argocd-github-app-id
+    },
+    "argocd-github-app-private-key" = {
+      description = "ArgoCD GitHub App private key"
+      value = var.argocd-github-app-private-key
     }
   }
 }
