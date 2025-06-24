@@ -6,6 +6,9 @@ argo-cd:
   configs:
     params:
       server.insecure: true
+    secret:
+      create: false
+    existingSecret: argocd-admin
 
   server:
     ingress:
@@ -15,6 +18,9 @@ argo-cd:
         - argocd.mllab.davidsfreun.de
     metrics:
       enabled: true
+    admin:
+      existingSecret: argocd-admin
+      existingSecretKey: password
 
   notifications:
     enabled: true
