@@ -66,6 +66,14 @@ locals {
     "argocd-admin-pw" = {
       description = "ArgoCD admin password"
       value = var.argocd-admin-pw
+    },
+    "argocd-github-app-id" = {
+      description = "ArgoCD GitHub App ID"
+      value = var.argocd-github-app-id
+    },
+    "argocd-github-app-installation-id" = {
+      description = "ArgoCD GitHub App installation ID"
+      value = var.argocd-github-app-id
     }
   }
 }

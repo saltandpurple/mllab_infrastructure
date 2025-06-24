@@ -32,9 +32,23 @@ variable "argocd-admin-pw" {
   description = "Password for ArgoCD admin user"
 }
 
-variable "argocd-github-app-repo" {
+variable "argocd-github-app-id" {
   type = string
   sensitive = true
   default = "" # required, so the tf plan doesn't fail
-  description = "GitHub App repository configuration for ArgoCD (JSON format with url, githubAppID, githubAppInstallationID, githubAppPrivateKey)"
+  description = "GitHub App ID for argocd"
+}
+
+variable "argocd-github-app-installation-id" {
+  type = string
+  sensitive = true
+  default = "" # required, so the tf plan doesn't fail
+  description = "GitHub App Installation ID for argocd"
+}
+
+variable "argocd-github-app-private-key" {
+  type = string
+  sensitive = true
+  default = "" # required, so the tf plan doesn't fail
+  description = "GitHub App private key for argocd"
 }
