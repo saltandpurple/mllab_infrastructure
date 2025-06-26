@@ -10,5 +10,6 @@ mlflow:
     metrics:
       enabled: true
     ingress:
-      enabled: false
-    hostname: "mlflow.mllab.davidsfreun.de"
+      enabled: true
+      hostname: "mlflow.mllab.davidsfreun.de"
+      ingressClassName: "nginx"
