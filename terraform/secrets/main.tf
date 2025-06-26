@@ -73,7 +73,7 @@ locals {
     },
     "argocd-github-app-installation-id" = {
       description = "ArgoCD GitHub App installation ID"
-      value = var.argocd-github-app-id
+      value = var.argocd-github-app-installation-id
     },
     "argocd-github-app-private-key" = {
       description = "ArgoCD GitHub App private key"
