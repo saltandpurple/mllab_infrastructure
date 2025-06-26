@@ -9,6 +9,8 @@ mlflow:
       storageClass: gp3
     metrics:
       enabled: true
+    service:
+      type: "ClusterIP"
     ingress:
       enabled: true
       hostname: "mlflow.mllab.davidsfreun.de"
