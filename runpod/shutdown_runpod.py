@@ -23,7 +23,8 @@ def shutdown_runpod():
             pods_url = "https://rest.runpod.io/v1/pods"
             resp = requests.get(pods_url, headers=headers)
             resp.raise_for_status()
-            pods = resp.json().get('pods', [])
+            pods = resp.json()
+
             pod = next((p for p in pods if p.get('name') == POD_NAME), None)
             if not pod:
                 sys.exit(f"Error: Pod {POD_NAME} not found.")
@@ -31,8 +32,8 @@ def shutdown_runpod():
             print(f"Found pod with ID: {pod_id}")
 
         print(f"Shutting down pod {pod_id}...")
-        terminate_url = f"https://rest.runpod.io/v1/pods/{pod_id}/terminate"
-        resp = requests.post(terminate_url, headers=headers)
+        terminate_url = f"https://rest.runpod.io/v1/pods/{pod_id}"
+        resp = requests.delete(terminate_url, headers=headers)
         resp.raise_for_status()
 
         if resp.json().get('success'):
