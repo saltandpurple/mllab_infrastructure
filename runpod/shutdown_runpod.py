@@ -36,10 +36,10 @@ def shutdown_runpod():
         resp = requests.delete(terminate_url, headers=headers)
         resp.raise_for_status()
 
-        if resp.json().get('success'):
+        if resp.status_code == 200:
             print("Pod terminated successfully.")
         else:
-            sys.exit(f"Error: Failed to terminate pod. API Message: {resp.json().get('message')}")
+            sys.exit(f"Error: Failed to terminate pod. API Message: {resp.status_code}")
 
     except requests.exceptions.RequestException as e:
         error = f"API request failed: {e}"
