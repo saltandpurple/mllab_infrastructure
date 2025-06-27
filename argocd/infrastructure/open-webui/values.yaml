@@ -1,0 +1,37 @@
+open-webui:
+  # Use existing secret for admin credentials
+  existingSecret: "open-webui"
+  
+  # Service configuration
+  service:
+    type: ClusterIP
+    port: 8080
+
+  # Ingress configuration - disabled by default, enable if needed
+  ingress:
+    enabled: false
+    
+  # Resource limits
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+  # Persistence for data
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClass: gp3-retain
+
+  # Environment variables that reference the secret
+  env:
+    - name: WEBUI_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: open-webui
+          key: secret-key
+    - name: DEFAULT_USER_ROLE
+      value: "user"
