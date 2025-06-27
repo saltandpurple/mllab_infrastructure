@@ -3,6 +3,7 @@ import os
 import sys
 import requests
 
+POD_NAME = "vllm-gpu-pod"
 def shutdown_runpod():
     """
     Finds and shuts down a RunPod GPU pod.
@@ -18,14 +19,14 @@ def shutdown_runpod():
 
     try:
         if not pod_id:
-            print("Searching for pod 'vllm-gpu-pod'...")
+            print(f"Searching for pod {POD_NAME}...")
             pods_url = "https://rest.runpod.io/v1/pods"
             resp = requests.get(pods_url, headers=headers)
             resp.raise_for_status()
             pods = resp.json().get('pods', [])
-            pod = next((p for p in pods if p.get('name') == 'vllm-gpu-pod'), None)
+            pod = next((p for p in pods if p.get('name') == POD_NAME), None)
             if not pod:
-                sys.exit("Error: Pod 'vllm-gpu-pod' not found.")
+                sys.exit(f"Error: Pod {POD_NAME} not found.")
             pod_id = pod['id']
             print(f"Found pod with ID: {pod_id}")
 
@@ -44,8 +45,6 @@ def shutdown_runpod():
         if e.response is not None:
             error += f" | Response: {e.response.text}"
         sys.exit(error)
-    except (KeyError, IndexError):
-        sys.exit("Error: Malformed API response when processing pods.")
     except Exception as e:
         sys.exit(f"An unexpected error occurred: {e}")
 
