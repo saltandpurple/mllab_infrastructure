@@ -4,7 +4,7 @@ import json
 import requests
 from typing import Dict, Any
 
-def create_runpod_gpu_pod() -> Dict[str, Any]:
+def create_run_pod() -> Dict[str, Any]:
     """
     Create a RunPod GPU pod with vLLM
     Community cloud, A4000, spot instance, 40GB storage
@@ -28,9 +28,9 @@ def create_runpod_gpu_pod() -> Dict[str, Any]:
         "gpuCount": 1,
         "imageName": "vllm/vllm-openai:latest",
         "containerDiskInGb": 40,
-        "interruptible": True,  # Means spot
+        "interruptible": False,  # Means spot
         "name": "vllm-gpu-pod",
-        "ports": "8000/http,22/tcp"
+        "ports": ["8000/http","22/tcp"]
     }
     
     print("Creating RunPod GPU pod with vLLM...")
@@ -54,4 +54,4 @@ def create_runpod_gpu_pod() -> Dict[str, Any]:
         raise
 
 if __name__ == "__main__":
-    create_runpod_gpu_pod()
+    create_run_pod()
