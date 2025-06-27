@@ -4,12 +4,11 @@ import json
 import requests
 from typing import Dict, Any
 
-def create_run_pod() -> Dict[str, Any]:
+def create_runpod() -> Dict[str, Any]:
     """
     Create a RunPod GPU pod with vLLM
     Community cloud, A4000, spot instance, 40GB storage
     """
-
     api_key = os.getenv('RUNPOD_API_KEY')
     if not api_key:
         raise ValueError("RUNPOD_API_KEY environment variable is required")
@@ -54,4 +53,4 @@ def create_run_pod() -> Dict[str, Any]:
         raise
 
 if __name__ == "__main__":
-    create_run_pod()
+    create_runpod()
