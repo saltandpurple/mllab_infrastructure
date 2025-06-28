@@ -14,7 +14,10 @@ open-webui:
     enabled: true
     size: 10Gi
     storageClass: gp3
-
+  ollama:
+    enabled: false
+  pipelines:
+    enabled: false
   env:
 #    - name: WEBUI_SECRET_KEY
 #      valueFrom:
