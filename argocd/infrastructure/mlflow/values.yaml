@@ -2,6 +2,8 @@ mlflow:
   postgresql:
     auth:
       existingSecret: "mlflow-postgresql"
+  minio:
+    enabled: false
   tracking:
     auth:
       existingSecret: "mlflow-tracking"
