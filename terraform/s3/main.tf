@@ -1,78 +1,87 @@
-resource "aws_iam_role" "bastion_role" {
-  name = "bastion-ssm-role"
+resource "aws_s3_bucket" "bucket" {
+  bucket = var.bucket_name
+}
 
+resource "aws_s3_bucket_versioning" "bucket_versioning" {
+  bucket = aws_s3_bucket.bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_encryption" {
+  bucket = aws_s3_bucket.bucket.id
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_iam_role" "irsa_role" {
+  name = "${var.bucket_name}-irsa-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole"
+        Action = "sts:AssumeRoleWithWebIdentity"
         Effect = "Allow"
         Principal = {
-          Service = "ec2.amazonaws.com"
+          Federated = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/oidc.eks.${data.aws_region.current.name}.amazonaws.com/id/*"
+        }
+        Condition = {
+          StringEquals = {
+            "oidc.eks.${data.aws_region.current.name}.amazonaws.com/id/*:sub" = "system:serviceaccount:agents:agents"
+          }
         }
       }
     ]
   })
 }
 
-resource "aws_iam_role_policy_attachment" "bastion_ssm_policy" {
-  role       = aws_iam_role.bastion_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+resource "aws_iam_role_policy" "bucket_access" {
+  name = "${var.bucket_name}-access"
+  role = aws_iam_role.irsa_role.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:ListBucket"
+        ]
+        Resource = [
+          aws_s3_bucket.bucket.arn,
+          "${aws_s3_bucket.bucket.arn}/*"
+        ]
+      }
+    ]
+  })
 }
 
-resource "aws_iam_instance_profile" "bastion_profile" {
-  name = "bastion-ssm-profile"
-  role = aws_iam_role.bastion_role.name
+resource "aws_s3_bucket_policy" "root_access" {
+  bucket = aws_s3_bucket.bucket.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "RootAccess"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+        Action = [
+          "s3:*"
+        ]
+        Resource = [
+          aws_s3_bucket.bucket.arn,
+          "${aws_s3_bucket.bucket.arn}/*"
+        ]
+      }
+    ]
+  })
 }
 
-resource "aws_security_group" "bastion_sg" {
-  name        = "bastion-host-sg"
-  description = "Security group for bastion host - no inbound rules, outbound only"
-  vpc_id      = var.vpc_id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "bastion-host-sg"
-    Environment = "mllab"
-  }
-}
-
-data "aws_ami" "amazon_linux" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["al2023-ami-*-arm64"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
-resource "aws_instance" "bastion_host" {
-  ami                    = data.aws_ami.amazon_linux.id
-  instance_type          = "t4g.micro"
-  key_name               = var.key_name
-  subnet_id              = var.subnet_id
-  vpc_security_group_ids = [aws_security_group.bastion_sg.id]
-  iam_instance_profile   = aws_iam_instance_profile.bastion_profile.name
-
-  tags = {
-    Name = "bastion-host"
-    Environment = "mllab"
-  }
-}
-
-
-output "bastion_host_instance_id" {
-  value = aws_instance.bastion_host.id
-}
