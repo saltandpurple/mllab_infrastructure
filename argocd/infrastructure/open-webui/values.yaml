@@ -19,6 +19,7 @@ open-webui:
   pipelines:
     enabled: false
   env:
+    # todo: spec  this from secret
 #    - name: WEBUI_SECRET_KEY
 #      valueFrom:
 #        secretKeyRef:
