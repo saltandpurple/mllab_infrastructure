@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "bucket" {
 resource "aws_s3_bucket_versioning" "bucket_versioning" {
   bucket = aws_s3_bucket.bucket.id
   versioning_configuration {
-    status = "Enabled"
+    status = "Disabled"
   }
 }
 
@@ -48,9 +48,7 @@ resource "aws_iam_role_policy" "bucket_access" {
       {
         Effect = "Allow"
         Action = [
-          "s3:GetObject",
-          "s3:PutObject",
-          "s3:DeleteObject",
+          "s3:*Object",
           "s3:ListBucket"
         ]
         Resource = [
