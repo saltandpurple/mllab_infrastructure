@@ -7,4 +7,3 @@ resource "aws_route53_record" "cname_records" {
   ttl     = each.value.ttl
   records = each.value.records
 }
-
