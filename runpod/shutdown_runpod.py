@@ -5,11 +5,6 @@ import requests
 
 POD_NAME = "vllm-gpu-pod"
 def shutdown_runpod():
-    """
-    Finds and shuts down a RunPod GPU pod.
-    The pod ID can be passed as a command-line argument.
-    If not, it searches for a pod named 'vllm-gpu-pod'.
-    """
     api_key = os.getenv('RUNPOD_API_KEY')
     if not api_key:
         sys.exit("Error: RUNPOD_API_KEY environment variable is required.")

@@ -5,10 +5,6 @@ import requests
 from typing import Dict, Any
 
 def create_runpod() -> Dict[str, Any]:
-    """
-    Create a RunPod GPU pod with vLLM
-    Community cloud, A4000, spot instance, 40GB storage
-    """
     api_key = os.getenv('RUNPOD_API_KEY')
     if not api_key:
         raise ValueError("RUNPOD_API_KEY environment variable is required")
@@ -27,7 +23,7 @@ def create_runpod() -> Dict[str, Any]:
         "gpuCount": 1,
         "imageName": "vllm/vllm-openai:latest",
         "containerDiskInGb": 40,
-        "interruptible": False,  # Means spot
+        "interruptible": False,  
         "name": "vllm-gpu-pod",
         "ports": ["8000/http","22/tcp"]
     }
