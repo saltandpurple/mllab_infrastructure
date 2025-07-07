@@ -9,4 +9,5 @@ variable "kubernetes_config_path" {
 
 variable "kubernetes_config_context" {
   type    = string
+  default = "mllab"
 }

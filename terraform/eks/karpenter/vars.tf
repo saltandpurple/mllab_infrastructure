@@ -1,3 +1,13 @@
+variable "kubernetes_config_path" {
+  type    = string
+  default = "~/.kube/config"
+}
+
+variable "kubernetes_config_context" {
+  type    = string
+  default = "mllab"
+}
+
 variable "eks_cluster_name" {
   type        = string
   description = "EKS Cluster name, used for conditions in the Karpenter IRSA IAM Policy."

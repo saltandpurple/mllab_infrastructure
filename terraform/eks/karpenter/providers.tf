@@ -2,27 +2,14 @@ provider aws {
   region = "eu-central-1"
   profile = "df"
 }
+# This provider config is based on the assumption that the kubeconfig has already been set up properly
+provider "kubectl" {
+  config_path    = var.kubernetes_config_path
+  config_context = var.kubernetes_config_context
+}
 
 provider "helm" {
   kubernetes {
-    host                   = var.cluster_endpoint
-    cluster_ca_certificate = base64decode(var.cluster_certificate_authority_data)
-    exec {
-      api_version = "client.authentication.k8s.io/v1beta1"
-      args = [
-        "eks", "get-token", "--cluster-name", var.eks_cluster_name, "--profile", "df"
-      ]
-      command = "aws"
-    }
-  }
-}
-
-provider "kubectl" {
-  host                   = var.cluster_endpoint
-  cluster_ca_certificate = base64decode(var.cluster_certificate_authority_data)
-  exec {
-    api_version = "client.authentication.k8s.io/v1beta1"
-    args        = ["eks", "get-token", "--cluster-name", var.eks_cluster_name, "--profile",  "df"]
-    command     = "aws"
+    config_path = var.kubernetes_config_path
   }
 }
