@@ -61,6 +61,10 @@ resource "kubectl_manifest" "application_of_applications" {
         destination:
           server: 'https://kubernetes.default.svc'
           namespace: argocd
+        syncPolicy:
+          syncOptions:
+            - CreateNamespace=true
+          automated: {}
 
     YAML
 }
