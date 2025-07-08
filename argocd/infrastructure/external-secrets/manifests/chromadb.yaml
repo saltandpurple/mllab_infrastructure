@@ -1,0 +1,17 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: chromadb
+  namespace: chromadb
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-parameter-store
+    kind: ClusterSecretStore
+  target:
+    name: chromadb
+    creationPolicy: Owner
+  data:
+  - secretKey: password
+    remoteRef:
+      key: /mllab/chromadb/chromadb-password

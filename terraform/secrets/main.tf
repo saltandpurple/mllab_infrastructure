@@ -78,6 +78,10 @@ locals {
     "argocd-github-app-private-key" = {
       description = "ArgoCD GitHub App private key"
       value = var.argocd-github-app-private-key
+    },
+    "chromadb-password" = {
+      description = "ChromaDB password"
+      value = var.chromadb-password
     }
   }
 }

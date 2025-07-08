@@ -52,3 +52,10 @@ variable "argocd-github-app-private-key" {
   default = "" # required, so the tf plan doesn't fail
   description = "GitHub App private key for argocd"
 }
+
+variable "chromadb-password" {
+  type = string
+  sensitive = true
+  default = "" # required, so the tf plan doesn't fail
+  description = "Password for ChromaDB"
+}
