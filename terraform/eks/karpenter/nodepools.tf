@@ -58,7 +58,7 @@ resource "kubectl_manifest" "karpenter_amazon_linux_node_class" {
           # Root device
           deviceName = "/dev/xvda"
           ebs = {
-            volumeSize = "100Gi"
+            volumeSize = "50Gi"
             volumeType = "gp3"
             encrypted  = true
             kmsKeyID   = var.ebs_kms_key_id
