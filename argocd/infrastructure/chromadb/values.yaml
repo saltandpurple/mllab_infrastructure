@@ -1,8 +1,5 @@
-# https://github.com/amikos-tech/chromadb-chart/tree/main
+# https://github.com/amikos-tech/chromadb-chart/blob/main/charts/chromadb-chart/values.yaml
 chromadb:
-  persistence:
-    storageClass: gp3
-    size: 20Gi
   service:
     type: ClusterIP
   ingress:
@@ -25,3 +22,6 @@ chromadb:
       limits:
         memory: "1Gi"
         cpu: "500m"
+    data:
+      volumeSize: "10Gi"
+      storageClass: gp3-retain
