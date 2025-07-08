@@ -6,10 +6,16 @@ chromadb:
     type: ClusterIP
   ingress:
     enabled: true
-    hostname: "chromadb.mllab.davidsfreun.de"
+    hosts:
+      - host: "chromadb.mllab.davidsfreun.de"
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
     ingressClassName: "nginx"
   auth:
     enabled: true
+    existingSecret: chromadb
+    type: "token"
   resources:
     requests:
       memory: "512Mi"
