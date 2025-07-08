@@ -107,13 +107,14 @@ resource "kubectl_manifest" "karpenter_nodepool_spot" {
             {
               key      = "karpenter.k8s.aws/instance-family"
               operator = "In"
-              values   = ["r8g", "r7g", "r6g", "m7g", "m8g"]
+              values   = ["t4g", "r7g", "r6g", "m7g", "m8g"]
+              # values   = ["t4g"]
             },
             
             {
               key      = "karpenter.k8s.aws/instance-size"
               operator = "In"
-              values = ["medium", "large", "xlarge"]
+              values = ["large", "xlarge"]
             },
             {
               key      = "karpenter.k8s.aws/instance-local-nvme"
