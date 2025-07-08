@@ -1,7 +1,7 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: chromadb
+  name: chromadb-auth
   namespace: chromadb
 spec:
   refreshInterval: 1h
@@ -14,4 +14,4 @@ spec:
   data:
   - secretKey: token
     remoteRef:
-      key: /mllab/chromadb/chromadb-token
+      key: /mllab/chromadb/token
