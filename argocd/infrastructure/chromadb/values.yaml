@@ -1,3 +1,4 @@
+# https://github.com/amikos-tech/chromadb-chart/tree/main
 chromadb:
   persistence:
     storageClass: gp3
@@ -14,7 +15,7 @@ chromadb:
     ingressClassName: "nginx"
   auth:
     enabled: true
-    existingSecret: chromadb
+    existingSecret: "chromadb-auth"
     type: "token"
   resources:
     requests:
