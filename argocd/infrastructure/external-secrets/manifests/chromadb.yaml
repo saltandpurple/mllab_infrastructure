@@ -9,9 +9,9 @@ spec:
     name: aws-parameter-store
     kind: ClusterSecretStore
   target:
-    name: chromadb
+    name: chromadb-auth
     creationPolicy: Owner
   data:
-  - secretKey: password
+  - secretKey: token
     remoteRef:
-      key: /mllab/chromadb/chromadb-password
+      key: /mllab/chromadb/chromadb-token
