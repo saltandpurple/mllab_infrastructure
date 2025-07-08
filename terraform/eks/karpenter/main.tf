@@ -22,14 +22,14 @@ resource "helm_release" "karpenter_crd" {
   namespace        = "kube-system"
   create_namespace = false
   version          = var.karpenter_helm_release_version
-  # values = [yamlencode({
-  #   webhook = {
-  #     enabled          = true
-  #     serviceName      = "karpenter"
-  #     serviceNamespace = "kube-system"
-  #     port             = 8443
-  #   }
-  # })]
+  values = [yamlencode({
+    webhook = {
+      enabled          = true
+      serviceName      = "karpenter"
+      serviceNamespace = "kube-system"
+      port             = 8443
+    }
+  })]
 }
 
 resource "helm_release" "karpenter" {
