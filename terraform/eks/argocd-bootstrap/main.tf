@@ -45,6 +45,7 @@ resource "helm_release" "argocd" {
 
 
 resource "kubectl_manifest" "application_of_applications" {
+  depends_on = [helm_release.argocd]
   yaml_body  = <<YAML
       apiVersion: argoproj.io/v1alpha1
       kind: Application
