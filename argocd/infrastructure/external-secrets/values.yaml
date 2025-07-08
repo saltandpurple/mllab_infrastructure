@@ -6,17 +6,12 @@ external-secrets:
     name: external-secrets-operator
     annotations:
       eks.amazonaws.com/role-arn: arn:aws:iam::115801844135:role/eks-mllab-external-secrets-irsa
-  
-  # Enable metrics for monitoring
   metrics:
     service:
       enabled: true
       port: 8080
-    
   webhook:
     port: 9443
-    
-  # Resources for the controller
   resources:
     limits:
       memory: 512Mi
