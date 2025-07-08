@@ -1,0 +1,10 @@
+apiVersion: v2
+name: chromadb
+type: application
+version: 0.0.1
+appVersion: "1.0"
+
+dependencies:
+  - name: chromadb
+    version: 0.1.23
+    repository: https://amikos-tech.github.io/chromadb-chart/

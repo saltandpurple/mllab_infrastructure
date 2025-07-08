@@ -1,0 +1,19 @@
+chromadb:
+  persistence:
+    storageClass: gp3
+    size: 20Gi
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: true
+    hostname: "chromadb.mllab.davidsfreun.de"
+    ingressClassName: "nginx"
+  auth:
+    enabled: true
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
