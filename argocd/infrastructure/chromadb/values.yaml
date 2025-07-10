@@ -15,7 +15,6 @@ chromadb:
       enabled: true
       existingSecret: "chromadb-auth"
       type: "token"
-    allowReset: true
     resources:
       requests:
         memory: "512Mi"
