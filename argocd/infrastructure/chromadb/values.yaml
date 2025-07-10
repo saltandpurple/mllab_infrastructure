@@ -15,7 +15,6 @@ chromadb:
       enabled: true
       existingSecret: "chromadb-auth"
       type: "token"
-    serverHost: "chromadb.mllab.davidsfreun.de"
     allowReset: true
     resources:
       requests:
