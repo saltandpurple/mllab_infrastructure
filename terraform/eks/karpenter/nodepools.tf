@@ -107,8 +107,8 @@ resource "kubectl_manifest" "karpenter_nodepool_spot" {
             {
               key      = "karpenter.k8s.aws/instance-family"
               operator = "In"
-              values   = ["t4g", "r7g", "r6g", "m7g", "m8g"]
-              # values   = ["t4g"]
+              # values   = ["t4g", "r7g", "r6g", "m7g", "m8g"]
+              values   = ["t4g"]
             },
             
             {
