@@ -15,6 +15,13 @@ chromadb:
       enabled: true
       existingSecret: "chromadb-auth"
       type: "token"
+    server:
+      httpPort: 8000
+      cors:
+        allowOrigins: ["*"]
+      allowResetClient: true
+      ui:
+        enabled: true
     resources:
       requests:
         memory: "512Mi"
