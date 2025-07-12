@@ -1,0 +1,17 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: convex-secret
+  namespace: convex
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-parameter-store
+    kind: ClusterSecretStore
+  target:
+    name: convex-secret
+    creationPolicy: Owner
+  data:
+  - secretKey: auth-key
+    remoteRef:
+      key: /mllab/convex/auth-key

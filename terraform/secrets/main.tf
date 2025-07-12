@@ -82,6 +82,10 @@ locals {
     "chromadb-token" = {
       description = "ChromaDB Token"
       value = var.chromadb-token
+    },
+    "convex-auth-key" = {
+      description = "Convex Auth Key"
+      value = var.convex-auth-key
     }
   }
 }

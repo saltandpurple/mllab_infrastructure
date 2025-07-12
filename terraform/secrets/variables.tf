@@ -59,3 +59,10 @@ variable "chromadb-token" {
   default = "" # required, so the tf plan doesn't fail
   description = "Token for ChromaDB"
 }
+
+variable "convex-auth-key" {
+  type = string
+  sensitive = true
+  default = "" # required, so the tf plan doesn't fail
+  description = "Auth key for Convex"
+}
