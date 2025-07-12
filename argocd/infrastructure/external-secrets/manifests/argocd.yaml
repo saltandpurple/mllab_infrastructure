@@ -19,7 +19,7 @@ spec:
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: argocd-github-app
+  name: mllab-infrastructure-repository
   namespace: argocd
 spec:
   refreshInterval: 1h
@@ -27,7 +27,7 @@ spec:
     name: aws-parameter-store
     kind: ClusterSecretStore
   target:
-    name: argocd-github-app
+    name: mllab-infrastructure-repository
     creationPolicy: Owner
     template:
       metadata:
@@ -36,6 +36,41 @@ spec:
       data:
         type: git
         url: "https://github.com/saltandpurple/mllab_infrastructure"
+        project: default
+        githubAppID: "{{ .githubAppId }}"
+        githubAppInstallationID: "{{ .githubAppInstallationId }}"
+        githubAppPrivateKey: "{{ .githubAppPrivateKey }}"
+  data:
+    - secretKey: githubAppId
+      remoteRef:
+        key: /mllab/argocd/github-app-id
+    - secretKey: githubAppInstallationId
+      remoteRef:
+        key: /mllab/argocd/github-app-installation-id
+    - secretKey: githubAppPrivateKey
+      remoteRef:
+        key: /mllab/argocd/github-app-private-key
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: helm-charts-repository
+  namespace: argocd
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-parameter-store
+    kind: ClusterSecretStore
+  target:
+    name: helm-charts-repository
+    creationPolicy: Owner
+    template:
+      metadata:
+        labels:
+          argocd.argoproj.io/secret-type: repository
+      data:
+        type: git
+        url: "https://github.com/saltandpurple/helm-charts"
         project: default
         githubAppID: "{{ .githubAppId }}"
         githubAppInstallationID: "{{ .githubAppInstallationId }}"
