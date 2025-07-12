@@ -14,7 +14,7 @@ spec:
       targetRevision: master
       helm:
         valueFiles:
-          - $values/convex/values.yaml
+          - $values/argocd/infrastructure/convex/values.yaml
   destination:
     namespace: convex
     name: in-cluster
