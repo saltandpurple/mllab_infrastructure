@@ -1,0 +1,26 @@
+qdrant:
+  persistence:
+    accessModes: ["ReadWriteOnce"]
+    size: 20Gi
+    storageClassName: gp3
+  
+  service:
+    type: ClusterIP
+  
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - host: qdrant.mllab.davidsfreun.de
+        paths:
+          - path: /
+            pathType: Prefix
+            servicePort: 6333
+  
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
