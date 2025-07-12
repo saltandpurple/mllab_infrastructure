@@ -10,7 +10,7 @@ spec:
       targetRevision: master
       ref: values
     - repoURL: "https://github.com/saltandpurple/helm-charts"
-      chart: convex
+      path: convex
       targetRevision: master
       helm:
         valueFiles:
