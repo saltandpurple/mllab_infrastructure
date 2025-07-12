@@ -5,10 +5,15 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: "https://github.com/saltandpurple/mllab_infrastructure"
-    path: argocd/infrastructure/convex
-    targetRevision: master
+  sources:
+    - repoURL: "https://github.com/saltandpurple/mllab_infrastructure"
+      targetRevision: master
+      ref: values
+    - repoURL: "https://github.com/saltandpurple/helm-charts"
+      chart: convex
+      helm:
+        valueFiles:
+          - $values/convex/values.yaml
   destination:
     namespace: convex
     name: in-cluster
