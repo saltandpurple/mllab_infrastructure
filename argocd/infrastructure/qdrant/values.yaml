@@ -1,11 +1,8 @@
+# todo: clean up nonsense
 qdrant:
   persistence:
-    accessModes: ["ReadWriteOnce"]
     size: 20Gi
     storageClassName: gp3
-  
-  service:
-    type: ClusterIP
   
   ingress:
     enabled: true
