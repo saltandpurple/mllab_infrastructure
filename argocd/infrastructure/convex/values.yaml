@@ -1,0 +1,14 @@
+convex:
+  existingSecret: "convex-secret"
+  
+  image:
+    backend: "ghcr.io/get-convex/convex-backend"
+    dashboard: "ghcr.io/get-convex/convex-dashboard"
+    tag: "latest"
+  
+  configMap:
+    INSTANCE_NAME: "convex-instance"
+    DATABASE_URL: "sqlite:///data/convex.db"
+    RUST_LOG: "info"
+  
+  host: "convex.mllab.davidsfreun.de"
