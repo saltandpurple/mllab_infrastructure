@@ -11,6 +11,7 @@ spec:
       ref: values
     - repoURL: "https://github.com/saltandpurple/helm-charts"
       chart: convex
+      targetRevision: master
       helm:
         valueFiles:
           - $values/convex/values.yaml
