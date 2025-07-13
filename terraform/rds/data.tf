@@ -5,10 +5,7 @@ data "aws_iam_session_context" "current" {
 }
 
 data "aws_vpc" "vpc" {
-  filter {
-    name = "tag:id"
-    values = [var.vpc_id]
-  }
+  id = var.vpc_id
 }
 
 data "aws_subnets" "private_subnets" {
