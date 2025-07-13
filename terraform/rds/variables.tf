@@ -16,32 +16,27 @@ variable "db_password" {
 }
 
 variable "engine_version" {
-  type    = string
-  default = "16.4"
+  type = string
 }
 
 variable "instance_class" {
-  type    = string
-  default = "db.t3.micro"
+  type = string
 }
 
 variable "allocated_storage" {
-  type    = number
-  default = 10
+  type = number
 }
 
 variable "max_allocated_storage" {
   description = "Upper limit for RDS auto-scaling storage"
   type        = number
-  default     = 20
 }
 
 variable "backup_retention_period" {
-  type    = number
-  default = 7
+  type = number
 }
 
-variable "vpc_name" {
+variable "vpc_id" {
   type = string
 }
 

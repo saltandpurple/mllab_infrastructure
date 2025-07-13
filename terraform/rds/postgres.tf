@@ -10,13 +10,13 @@ resource "aws_db_subnet_group" "postgres_subnet_group" {
 resource "aws_security_group" "postgres_sg" {
   name        = "postgres-rds-sg"
   description = "Security group for PostgreSQL RDS instance"
-  vpc_id      = data.aws_vpc.main_vpc.id
+  vpc_id      = data.aws_vpc.vpc.id
 
   ingress {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.main_vpc.cidr_block]
+    cidr_blocks = [data.aws_vpc.vpc.cidr_block]
   }
 
   egress {

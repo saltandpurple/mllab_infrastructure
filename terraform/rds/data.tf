@@ -4,19 +4,14 @@ data "aws_iam_session_context" "current" {
   arn = data.aws_caller_identity.current.arn
 }
 
-data "aws_vpc" "main_vpc" {
+data "aws_vpc" "vpc" {
   filter {
-    name   = "tag:Name"
-    values = [var.vpc_name]
+    name = "tag:id"
+    values = [var.vpc_id]
   }
 }
 
 data "aws_subnets" "private_subnets" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.main_vpc.id]
-  }
-
   filter {
     name   = "tag:Name"
     values = ["PrivateSubnet-*"]
