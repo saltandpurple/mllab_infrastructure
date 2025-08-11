@@ -4,7 +4,7 @@ export PV=/workspace
 
 python3 -m venv $PV/venv
 . $PV/venv/bin/activate
-python -m pip install -U pip setuptools wheel
+
 
 # 2) Redirect all caches/tmp to the volume
 mkdir -p $PV/.cache/{pip,huggingface,datasets,torch} $PV/tmp
