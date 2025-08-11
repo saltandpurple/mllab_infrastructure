@@ -22,9 +22,3 @@ ln -s $PV/.cache/pip        ~/.cache/pip
 ln -s $PV/.cache/huggingface ~/.cache/huggingface
 ln -s $PV/.cache/torch      ~/.cache/torch
 
-# 4) Install
-pip install -r mapping-llm-censorship/requirements.txt
-
-# 5) Clean up container space
-pip cache purge
-rm -rf ~/.cache/* /root/.cache/* $HOME/.huggingface/* 2>/dev/null
