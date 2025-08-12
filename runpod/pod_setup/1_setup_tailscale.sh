@@ -1,5 +1,9 @@
 #!/usr/bin/bash
 
+# Install basic utilities
+apt update
+apt install nmap curl nano -y
+
 # Install & setup tailscale
 curl -fsSL https://tailscale.com/install.sh | sh
 tailscaled --tun=userspace-networking --socks5-server=localhost:1055 >/tmp/ts.log 2>&1 &
