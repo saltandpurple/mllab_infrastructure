@@ -2,7 +2,7 @@
 
 # Install basic utilities
 apt update
-apt install nmap curl nano -y
+apt install nmap curl nano rsync -y
 
 # Install & setup tailscale
 curl -fsSL https://tailscale.com/install.sh | sh
