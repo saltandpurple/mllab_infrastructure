@@ -3,4 +3,4 @@
 # transfer scripts
 scp -r . runpod-scp:/workspace/
 # transfer repo
-tar -C ~/dev/projects/personal/mllab/ -czf - mapping-llm-censorship | ssh runpod-scp 'tar -xzf - -C /workspace/'
+rsync -avz --exclude='.git' ~/dev/projects/personal/mllab/mapping-llm-censorship/ runpod-scp:/workspace/mapping-llm-censorship/
